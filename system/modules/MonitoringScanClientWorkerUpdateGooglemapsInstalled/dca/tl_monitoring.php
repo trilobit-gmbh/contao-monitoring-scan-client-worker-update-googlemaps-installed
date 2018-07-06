@@ -11,10 +11,22 @@ array_splice(
     (
         $strShowAfterwards,
         'googlemaps',
-        'googlemapsCount',
-        'googlemapsApi',
     )
 );
+
+
+// remove columns
+$arrRemovedColumns = array('last_test_date', 'unfinished_tasks');
+
+foreach ($arrRemovedColumns as $value)
+{
+    array_splice(
+        $GLOBALS['TL_DCA']['tl_monitoring']['list']['label']['fields'],
+        array_search($value, $GLOBALS['TL_DCA']['tl_monitoring']['list']['label']['fields']),
+        1
+    );
+}
+
 
 // add palette in detailview
 $GLOBALS['TL_DCA']['tl_monitoring']['palettes']['default'] = str_replace
@@ -23,6 +35,7 @@ $GLOBALS['TL_DCA']['tl_monitoring']['palettes']['default'] = str_replace
     ';{googlemapssensor_legend},googlemaps,googlemapsCount,googlemapsApi;{test_legend}',
     $GLOBALS['TL_DCA']['tl_monitoring']['palettes']['default']
 );
+
 
 // field
 $GLOBALS['TL_DCA']['tl_monitoring']['fields']['googlemaps'] = array
@@ -74,17 +87,21 @@ $GLOBALS['TL_DCA']['tl_monitoring']['fields']['googlemapsApi'] = array
  */
 class tl_monitoring_googlemaps extends Backend
 {
-    /**
-     * @param $row
-     * @param DataContainer $dc
-     * @param $args
-     * @return mixed
-     */
     public function getLabel($row, DataContainer $dc, $args)
     {
         $intPosGooglemaps = array_search('googlemaps', $GLOBALS['TL_DCA']['tl_monitoring']['list']['label']['fields']);
+        $intPosWebsite    = array_search('website', $GLOBALS['TL_DCA']['tl_monitoring']['list']['label']['fields']);
 
-        $args[$intPosGooglemaps] = '<img src="system/modules/Monitoring/assets/status_' . strtolower($row['googlemaps']) . '.png"/>';
+        $args[$intPosWebsite] = preg_replace('/^(http|https)\:\/\/(.*?)(|\/.*)$/', '$2', $args[$intPosWebsite]);
+
+        $args[$intPosGooglemaps] = '<div style="white-space: nowrap;">'
+            . '<div style="margin-bottom:5px">' . ($row['googlemapsCount'] > 0 ? $row['googlemapsCount'] . ' x ' : '') . '<img src="system/modules/Monitoring/assets/status_' . strtolower($row['googlemaps']) . '.png"/></div>'
+            . ($row['googlemapsApi'] === '0'
+                ? ''
+                : '<div style="margin-bottom:5px">' . preg_replace('/\|/', '</div><div style="margin-bottom:5px">', $row['googlemapsApi']) . '</div>'
+              )
+            .'</div>'
+        ;
 
         return $args;
     }

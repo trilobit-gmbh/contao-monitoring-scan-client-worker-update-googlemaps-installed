@@ -27,4 +27,4 @@ $GLOBALS['TL_LANG']['tl_monitoring']['googlemapsCount'][1] = 'The number of used
 
 
 $GLOBALS['TL_LANG']['tl_monitoring']['googlemapsApi'][0] = 'Google Maps API-Keys';
-$GLOBALS['TL_LANG']['tl_monitoring']['googlemapsApi'][1] = 'The API key and the associated domain or language..';
+$GLOBALS['TL_LANG']['tl_monitoring']['googlemapsApi'][1] = 'The API key and the associated domain or language.';
