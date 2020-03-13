@@ -26,6 +26,7 @@ Compatibility
 
 - Contao version >= 3.5.35
 - Contao version >= 4.4.20
+- Contao version ~ 4.9
 - dlh_googlemaps >= 2.3
 
 
